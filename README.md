@@ -2,79 +2,49 @@
 
 Custom skills for [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
 
-## Council
+## Skills
 
-**Multi-perspective analysis using Six Thinking Hats.**
+| Skill | Description |
+|-------|-------------|
+| [council](skills/council/) | Multi-perspective analysis using Six Thinking Hats. Spawns 5 parallel workers then synthesizes with Blue Hat. |
 
-Spawns 5 parallel workers — Facts, Gut, Critic, Optimist, Creative — then synthesizes their output as the Blue Hat (Process) to surface blind spots and prevent groupthink.
+## Install
 
-Based on [Edward de Bono's Six Thinking Hats](https://en.wikipedia.org/wiki/Six_Thinking_Hats) methodology.
-
-### How it works
-
-When you invoke `/council`, Claude:
-
-1. Spawns 5 parallel subagents, each wearing a different "hat"
-2. Each hat analyzes your challenge from its unique perspective
-3. Claude wears the Blue Hat to synthesize all perspectives into an actionable summary
-
-| Hat | Role | Key Question |
-|-----|------|--------------|
-| WHITE | Facts Analyst | What do we KNOW? |
-| RED | Gut Check | What do we FEEL? |
-| BLACK | Devil's Advocate | What could go WRONG? |
-| YELLOW | Optimist | What's GOOD? |
-| GREEN | Creative | What ELSE could we try? |
-| BLUE | Process (Claude) | What should we DO? |
-
-### Usage
-
-```
-/council Should we rewrite our monolith into microservices?
-```
-
-Or use natural language triggers:
-
-```
-Ask the Council — should we build or buy our auth system?
-Let the Council decide on our pricing model.
-```
-
-### Install
-
-Copy the skill into your Claude Code skills directory:
+### All skills
 
 ```bash
-# Global (all projects)
-mkdir -p ~/.claude/skills/council
-cp .claude/skills/council/SKILL.md ~/.claude/skills/council/SKILL.md
+git clone https://github.com/ddaan/claude-skills.git ~/claude-skills
 
-# Project-level (single project)
-mkdir -p .claude/skills/council
-cp .claude/skills/council/SKILL.md .claude/skills/council/SKILL.md
+# Symlink all skills at once
+for skill in ~/claude-skills/skills/*/; do
+  ln -s "$skill" ~/.claude/skills/"$(basename "$skill")"
+done
 ```
 
-Or clone this repo and symlink:
+### Single skill
 
 ```bash
-git clone https://github.com/daangemist/claude-skills.git ~/claude-skills
-mkdir -p ~/.claude/skills
-ln -s ~/claude-skills/.claude/skills/council ~/.claude/skills/council
+git clone https://github.com/ddaan/claude-skills.git ~/claude-skills
+
+# Symlink just one
+ln -s ~/claude-skills/skills/council ~/.claude/skills/council
 ```
 
-### Best suited for
+### Without cloning
 
-- Architecture decisions (monolith vs microservices, tech stack choices)
-- Build vs buy evaluations
-- Strategy decisions (pricing, go-to-market, hiring)
-- Risk assessment for major changes
-- Any decision where you want to avoid groupthink
+Copy the `SKILL.md` from any skill directory into `~/.claude/skills/<skill-name>/SKILL.md`.
 
-### Not ideal for
+## Structure
 
-- Simple bug fixes or code tasks (overkill)
-- Questions with obvious answers
-- Tasks that need execution, not deliberation
+```
+skills/
+  council/
+    SKILL.md        # Skill definition (required)
+    README.md       # Documentation
+  your-skill/
+    SKILL.md
+    README.md
+```
 
 ## License
 
